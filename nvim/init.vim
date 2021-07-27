@@ -2,37 +2,35 @@ call plug#begin("~/.config/nvim/plugged")
   " Themes
   Plug 'morhetz/gruvbox'
   Plug 'tomasr/molokai'
+  Plug 'joshdick/onedark.vim'
+  Plug 'sainnhe/sonokai'
 
-  "Lightline
-  Plug 'itchyny/lightline.vim'
+  " Statusline 
+  Plug 'vim-airline/vim-airline'
+  Plug 'tpope/vim-fugitive'
+  Plug 'airblade/vim-gitgutter'
 
-  " Fzf
+  " FZF
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
 
-  " NERD
+  " File Browser
   Plug 'preservim/nerdtree'
-  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-  Plug 'Xuyuanp/nerdtree-git-plugin' 
+  Plug 'Xuyuanp/nerdtree-git-plugin'
   Plug 'ryanoasis/vim-devicons'
+  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+  Plug 'preservim/nerdcommenter'
 
-  " Code
+  " Code Helpers
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  Plug 'w0rp/ale'
-  Plug 'sheerun/vim-polyglot'
 
   " Languages
-  Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}
+  Plug 'sheerun/vim-polyglot'
+  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 
-" Color config
-if (has("termguicolors"))
- set termguicolors
-endif
-set background=dark
-colorscheme molokai
 
-" Neovim config
+" General Configuration
 syntax enable
 syntax on
 set undodir=~/.config/nvim/undodir " set undotree file directory
@@ -48,73 +46,32 @@ set nobackup
 set breakindent                                      
 set smartindent
 set smartcase
+set smarttab
 set incsearch
 set hidden
 set updatetime=250
 set shortmess+=c
 set noshowmode
 set splitright
+set ignorecase
+set signcolumn=yes " always show signcolumns
 set mouse=a
 set encoding=utf-8
 set clipboard=unnamedplus
-let mapleader=" "
-" " Panel switching
-map <leader>h :wincmd h<CR>
-map <leader>j :wincmd j<CR>
-map <leader>k :wincmd k<CR>
-map <leader>l :wincmd l<CR>
-" " Split panel
-nnoremap <leader>v <C-w>v
-nnoremap <leader>s <C-w>s
-" " Map yanked to clipboard
-vnoremap <C-c> "*y
-" " Map show undo tree
-nnoremap <leader>u :UndotreeShow<CR>
-" " Map to open current file in NERDTree and set size
-nnoremap <leader>pv :NERDTreeFind<bar> :vertical resize 45<CR>
-" " Line moving
-" " " Normal mode
-nnoremap <C-j> :m .+1<CR>==
-nnoremap <C-k> :m .-2<CR>==
-" " Insert mode
-inoremap <C-j> <ESC>:m .+1<CR>==gi
-inoremap <C-k> <ESC>:m .-2<CR>==gi
-" " Visual mode
-vnoremap <C-j> :m '>+1<CR>gv=gv
-vnoremap <C-k> :m '<-2<CR>gv=gv
-" " Map escape for terminal emulator
-tnoremap <Esc> <C-\><C-n>
-" " Map to replacetext under cursor
-nnoremap <leader>sr :%s/\<<C-r><C-w>\>/
+set cursorline
 
-" Lightline
-let g:lightline = {
-  \     'colorscheme': 'powerlineish',
-  \     'active': {
-  \         'left': [['mode', 'paste' ], ['gitbranch', 'readonly', 'filename', 'modified'], ],
-  \         'right': [['lineinfo'], ['percent'], ['fileformat', 'fileencoding']]
-  \     },
-  \     'component_function': {
-  \         'gitbranch': 'FugitiveHead'
-  \     },
-  \ }
 
-" NERDTree
-let g:NERDTreeShowHidden = 1 
-let g:NERDTreeMinimalUI = 1 " hide helper
-let g:NERDTreeIgnore = ['^node_modules$'] " ignore node_modules to increase load speed 
-let g:NERDTreeStatusline = '' " set to empty to use lightline
-" " Toggle
-noremap <silent> <C-b> :NERDTreeToggle<CR>
-" " Close window if NERDTree is the last one
-autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" Theme
+if (has("termguicolors"))
+ set termguicolors
+endif
+set background=dark
+let g:sonokai_enable_italic = 1
+let g:sonokai_disable_italic_comment = 1
+colorscheme sonokai
 
-" NERDTree Syntax Highlight
-" " Enables folder icon highlighting using exact match
-let g:NERDTreeHighlightFolders = 1 
-" " Highlights the folder name
-let g:NERDTreeHighlightFoldersFullName = 1 
-" " Color customization
+
+" Colours
 let s:brown = "905532"
 let s:aqua =  "3AFFDB"
 let s:blue = "689FB6"
@@ -133,54 +90,49 @@ let s:lightGreen = "31B53E"
 let s:white = "FFFFFF"
 let s:rspec_red = 'FE405F'
 let s:git_orange = 'F54D27'
-" " This line is needed to avoid error
-let g:NERDTreeExtensionHighlightColor = {} 
-" " Sets the color of css files to blue
-let g:NERDTreeExtensionHighlightColor['css'] = s:blue 
-" " This line is needed to avoid error
-let g:NERDTreeExactMatchHighlightColor = {} 
-" " Sets the color for .gitignore files
-let g:NERDTreeExactMatchHighlightColor['.gitignore'] = s:git_orange 
-" " This line is needed to avoid error
-let g:NERDTreePatternMatchHighlightColor = {} 
-" " Sets the color for files ending with _spec.rb
-let g:NERDTreePatternMatchHighlightColor['.*_spec\.rb$'] = s:rspec_red 
-" " Sets the color for folders that did not match any rule
-let g:WebDevIconsDefaultFolderSymbolColor = s:beige 
-" " Sets the color for files that did not match any rule
-let g:WebDevIconsDefaultFileSymbolColor = s:blue 
 
-" NERDTree Git Plugin
-let g:NERDTreeIndicatorMapCustom = {
-    \ "Modified"  : "✹",
-    \ "Staged"    : "✚",
-    \ "Untracked" : "✭",
-    \ "Renamed"   : "➜",
-    \ "Unmerged"  : "═",
-    \ "Deleted"   : "✖",
-    \ "Dirty"     : "✗",
-    \ "Clean"     : "✔︎",
-    \ 'Ignored'   : '☒',
-    \ "Unknown"   : "?"
-    \ }
 
-" Nerd Commenter
-" " Use compact syntax for prettified multi-line comments
-let g:NERDCompactSexyComs = 1
-" " Allow commenting and inverting empty lines (useful when commenting a region)
-let g:NERDCommentEmptyLines = 1
-" " Enable trimming of trailing whitespace when uncommenting
-let g:NERDTrimTrailingWhitespace = 1
-" " Enable NERDCommenterToggle to check all selected lines is commented or not
-let g:NERDToggleCheckAllLines = 1
-" " Add spaces after comment delimiters by default
-let g:NERDSpaceDelims = 1
-" " Map ++ to call NERD Commenter and use iTerm key bindings 
-" " to bind Ctmd+/ to ++
-vmap ++ <plug>NERDCommenterToggle
-nmap ++ <plug>NERDCommenterToggle
+" Key Mapping
+let mapleader=" "
+" " Panel switching
+map <leader>h :wincmd h<CR>
+map <leader>j :wincmd j<CR>
+map <leader>k :wincmd k<CR>
+map <leader>l :wincmd l<CR>
+" " Split panel
+nnoremap <leader>v <C-w>v
+nnoremap <leader>s <C-w>s
+" " Map yanked to clipboard
+vnoremap <C-c> "*y
+" " Map show undo tree
+nnoremap <leader>u :UndotreeShow<CR>
+" " Line moving
+" " " Normal mode
+nnoremap <C-j> :m .+1<CR>==
+nnoremap <C-k> :m .-2<CR>==
+" " Insert mode
+inoremap <C-j> <ESC>:m .+1<CR>==gi
+inoremap <C-k> <ESC>:m .-2<CR>==gi
+" " Visual mode
+vnoremap <C-j> :m '>+1<CR>gv=gv
+vnoremap <C-k> :m '<-2<CR>gv=gv
+" " Map escape for terminal emulator
+tnoremap <Esc> <C-\><C-n>
+" " Map to replacetext under cursor
+nnoremap <leader>sr :%s/\<<C-r><C-w>\>/
 
-" Fuzzy search
+
+" Statusline Configuration
+let g:airline_theme = 'sonokai'
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#syntastic#enabled = 1
+let g:airline#extensions#branch#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tagbar#enabled = 1
+let g:airline_skip_empty_sections = 1
+
+
+" FZF Configuration
 nnoremap <C-p> :GFiles<CR>
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
@@ -189,35 +141,19 @@ let g:fzf_action = {
   \}
 let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 
-" ALE (Asynchronous Lint Engine)
-let g:ale_fixers = {
- \ 'javascript': ['eslint']
- \ }
-let g:ale_sign_error = '❌'
-let g:ale_sign_warning = '⚠️'
-let g:ale_fix_on_save = 1
 
-" COC
-" " COC extension
-let g:coc_user_config = {}
+" CoC Configuration
 let g:coc_global_extensions = [
-      \ 'coc-emmet', 
-      \ 'coc-css', 
-      \ 'coc-html', 
-      \ 'coc-json', 
-      \ 'coc-prettier', 
-      \ 'coc-tsserver', 
-      \ 'coc-snippets', 
-      \ 'coc-lua',
-      \ 'coc-python',
-      \ 'coc-java',
-      \ 'coc-eslint']
-" " To go back to previous state use Ctrl+O
-nmap <silent><leader>gd <Plug>(coc-definition)
-nmap <silent><leader>gy <Plug>(coc-type-definition)
-nmap <silent><leader>gi <Plug>(coc-implementation)
-nmap <silent><leader>gr <Plug>(coc-references)
+  \ 'coc-snippets',
+  \ 'coc-pairs',
+  \ 'coc-tsserver',
+  \ 'coc-eslint', 
+  \ 'coc-prettier', 
+  \ 'coc-json', 
+  \ ]
 
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
@@ -229,65 +165,123 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" " Always show the signcolumn, otherwise it would shift the text each time
-" " diagnostics appear/become resolved.
-if has("patch-8.1.1564")
-  " " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
 
-" " Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh() 
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Or use `complete_info` if your vim support it, like:
+" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 
-" " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-" " position. Coc only does snippet and additional edit on confirm.
-" " <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
-if exists('*complete_info')
-  inoremap <expr> <cr> complete_info()["seleOBOBcted"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-" " Highlight the symbol and its references when holding the cursor.
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" " Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
+" Remap for rename current word
+nmap <F2> <Plug>(coc-rename)
 
-" " Formatting selected code.
+" Remap for format selected region
 xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected
+nmap <leader>f  <Plug>(coc-format-selected)
 
 augroup mygroup
   autocmd!
-  " " Setup formatexpr specified filetype(s).
+  " Setup formatexpr specified filetype(s).
   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " " Update signature help on jump placeholder.
+  " Update signature help on jump placeholder
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
-" " Applying codeAction to the selected region.
-" " Example: `<leader>aap` for current paragraph
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
 xmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>a  <Plug>(coc-codeaction-selected)
 
-" " Remap keys for applying codeAction to the current buffer.
+" Remap for do codeAction of current line
 nmap <leader>ac  <Plug>(coc-codeaction)
-" " Apply AutoFix to problem on the current line.
+" Fix autofix problem of current line
 nmap <leader>qf  <Plug>(coc-fix-current)
 
-" " Add `:Format` command to format current buffer.
+" Create mappings for function text object, requires document symbols feature of languageserver.
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+
+" Use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
+nmap <silent> <C-d> <Plug>(coc-range-select)
+xmap <silent> <C-d> <Plug>(coc-range-select)
+
+" Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
 
-" " Add `:Fold` command to fold current buffer.
+" Use `:Fold` to fold current buffer
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
-" " Add `:OR` command for organize imports of the current buffer.
+" use `:OR` for organize import of current buffer
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
 
-" " Add (Neo)Vim's native statusline support.
-" " NOTE: Please see `:h coc-status` for integrations with external plugins that
-" " provide custom statusline: lightline.vim, vim-airline.
+" Add status line support, for integration with other plugin, checkout `:h coc-status`
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+
+" NERD Configuration 
+nnoremap <leader>n :NERDTreeFocus<CR>
+nnoremap <C-t> :NERDTreeToggle<bar> :vertical resize 50<CR>
+
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeMinimalUI = 1 " hide helper
+let g:NERDTreeIgnore = ['^node_modules$'] " ignore node_modules to increase load speed 
+let g:NERDTreeQuitOnOpen = 1 " Close NERDTree after opening a file from it
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+                \ 'Modified'  :'✹',
+                \ 'Staged'    :'✚',
+                \ 'Untracked' :'✭',
+                \ 'Renamed'   :'➜',
+                \ 'Unmerged'  :'═',
+                \ 'Deleted'   :'✖',
+                \ 'Dirty'     :'✗',
+                \ 'Ignored'   :'☒',
+                \ 'Clean'     :'✔︎',
+                \ 'Unknown'   :'?',
+                \ }
+let g:NERDTreeGitStatusUntrackedFilesMode = 'all'
+let g:NERDTreeGitStatusConcealBrackets = 1
+" NERD Highlight
+let g:NERDTreeFileExtensionHighlightFullName = 1
+let g:NERDTreeExactMatchHighlightFullName = 1
+let g:NERDTreePatternMatchHighlightFullName = 1
+let g:NERDTreeHighlightFolders = 1 " enables folder icon highlighting using exact match
+let g:NERDTreeHighlightFoldersFullName = 1 " highlights the folder name
+let g:NERDTreeExtensionHighlightColor = {} " this line is needed to avoid error
+let g:NERDTreeExtensionHighlightColor['css'] = s:blue " sets the color of css files to blue
+let g:NERDTreeExactMatchHighlightColor = {} " this line is needed to avoid error
+let g:NERDTreeExactMatchHighlightColor['.gitignore'] = s:git_orange " sets the color for .gitignore files
+let g:NERDTreePatternMatchHighlightColor = {} " this line is needed to avoid error
+let g:NERDTreePatternMatchHighlightColor['.*_spec\.rb$'] = s:rspec_red " sets the color for files ending with _spec.rb
+let g:WebDevIconsDefaultFolderSymbolColor = s:beige " sets the color for folders that did not match any rule
+let g:WebDevIconsDefaultFileSymbolColor = s:blue " sets the color for files that did not match any rule
+
+
+" Golang Configuration
+let g:go_fmt_command = "goimports"
