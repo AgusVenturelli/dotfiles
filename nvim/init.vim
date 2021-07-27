@@ -120,6 +120,10 @@ vnoremap <C-k> :m '<-2<CR>gv=gv
 tnoremap <Esc> <C-\><C-n>
 " " Map to replacetext under cursor
 nnoremap <leader>sr :%s/\<<C-r><C-w>\>/
+" " Map to open Search with CoC & FZF
+nnoremap <leader>fs :Files<CR>
+nnoremap <leader>gs :CocSearch<space>
+nnoremap <leader>b :Buffers<CR>
 
 
 " Statusline Configuration
@@ -133,13 +137,11 @@ let g:airline_skip_empty_sections = 1
 
 
 " FZF Configuration
-nnoremap <C-p> :GFiles<CR>
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit'
   \}
-let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 
 
 " CoC Configuration
