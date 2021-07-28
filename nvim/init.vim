@@ -94,6 +94,8 @@ let s:git_orange = 'F54D27'
 
 " Key Mapping
 let mapleader=" "
+" " Open init.vim
+nnoremap <leader>e :e $HOME/.config/nvim/init.vim<CR>
 " " Panel switching
 map <leader>h :wincmd h<CR>
 map <leader>j :wincmd j<CR>
@@ -152,6 +154,9 @@ let g:coc_global_extensions = [
   \ 'coc-eslint', 
   \ 'coc-prettier', 
   \ 'coc-json', 
+  \ 'coc-html',
+  \ 'coc-go',
+  \ 'coc-pyright',
   \ ]
 
 " Use tab for trigger completion with characters ahead and navigate.
@@ -249,7 +254,13 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " NERD Configuration 
 nnoremap <leader>n :NERDTreeFocus<CR>
-nnoremap <C-t> :NERDTreeToggle<bar> :vertical resize 50<CR>
+nnoremap <leader>t :NERDTreeToggle<bar> :vertical resize 50<CR>
+" Start NERDTree when Vim is started without file arguments.
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1 " hide helper
