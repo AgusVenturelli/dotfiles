@@ -122,6 +122,10 @@ vnoremap <C-k> :m '<-2<CR>gv=gv
 tnoremap <Esc> <C-\><C-n>
 " " Map to replacetext under cursor
 nnoremap <leader>sr :%s/\<<C-r><C-w>\>/
+" " Buffers switching
+nnoremap <TAB> :bnext<CR>
+nnoremap <S-TAB> :bprevious<CR>
+nnoremap <C-c> :bdelete<CR>
 " " Map to open Search with CoC & FZF
 nnoremap <leader>fs :Files<CR>
 nnoremap <leader>gs :CocSearch<space>
@@ -254,7 +258,7 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " NERD Configuration 
 nnoremap <leader>n :NERDTreeFocus<CR>
-nnoremap <leader>t :NERDTreeToggle<bar> :vertical resize 50<CR>
+nnoremap <leader>t :NERDTreeToggle<CR>
 " Start NERDTree when Vim is started without file arguments.
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
@@ -262,6 +266,7 @@ autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
 autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
     \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 
+let g:NERDTreeWinSize=60
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1 " hide helper
 let g:NERDTreeIgnore = ['^node_modules$'] " ignore node_modules to increase load speed 
