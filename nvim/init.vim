@@ -33,12 +33,11 @@ call plug#end()
 " General Configuration
 syntax enable
 syntax on
-set undodir=~/.config/nvim/undodir " set undotree file directory
 set undofile " set undotree to save to file
 set number relativenumber " set line number
 set nowrap " set no soft wrap
-set tabstop=2 softtabstop=2 " set tab size
-set shiftwidth=2 " affect amount of indentation
+set tabstop=4 softtabstop=4 " set tab size
+set shiftwidth=4 " affect amount of indentation
 set expandtab " set that tab will insert softabstop amount of space characters
 set nowritebackup                                            
 set noswapfile
@@ -301,6 +300,10 @@ let g:WebDevIconsDefaultFolderSymbolColor = s:beige " sets the color for folders
 let g:WebDevIconsDefaultFileSymbolColor = s:blue " sets the color for files that did not match any rule
 
 
+" SQL Completion
+let g:omni_sql_no_default_maps = 1
+
+
 " Golang Configuration
 let g:go_fmt_command = "goimports"
 let g:go_highlight_build_constraints = 1
@@ -311,4 +314,4 @@ let g:go_highlight_methods = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_structs = 1
 let g:go_highlight_types = 1
-let g:go_auto_sameids = 1
+" let g:go_auto_sameids = 1
