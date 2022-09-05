@@ -35,7 +35,7 @@ call plug#begin("~/.config/nvim/plugged")
 call plug#end()
 
 
-" General onfiguration
+" General Configuration
 syntax enable
 syntax on
 set undofile " set undotree to save to file
