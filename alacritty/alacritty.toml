@@ -1,0 +1,28 @@
+# $HOME/.config/alacritty/alacritty.toml
+
+import = [
+  # "~/.config/alacritty/catppuccin-latte.toml"
+  # "~/.config/alacritty/catppuccin-frappe.toml"
+  # "~/.config/alacritty/catppuccin-macchiato.toml"
+  "~/.config/alacritty/catppuccin-mocha.toml"
+]
+
+[env]
+TERM = "xterm-256color"
+
+[window]
+opacity = 1.0
+padding.x = 10
+padding.y = 10
+decorations = "Full"
+blur=true
+dynamic_padding=true
+option_as_alt="OnlyLeft"
+
+[font]
+size = 14.0
+normal = { family = "JetBrainsMono Nerd Font", style = "Thin" }
+bold = { family = "JetBrainsMono Nerd Font", style = "Light" }
+italic = { family = "JetBrainsMono Nerd Font", style = "Light Italic" }
+bold_italic = { family = "JetBrainsMono Nerd Font", style = "Italic" }
+offset = { x = 0, y = 0}
