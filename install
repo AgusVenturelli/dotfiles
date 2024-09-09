@@ -1,2 +1,75 @@
-#!/usr/bin/env sh
-echo "Installing.."
+#!/bin/bash
+
+echo "Start!"
+
+is_installed() {
+	command -v "$1" >/dev/null 2>&1
+}
+
+echo "Check if brew package manager is installed"
+if ! is_installed brew; then
+	echo -e "\t- Installing brew..."
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+else
+	echo -e "\t- Is already installed"
+fi
+
+echo "Check if neovim is installed"
+if ! is_installed nvim; then
+	echo -e "\t- Installing neovim..."
+	brew install neovim
+else
+	echo -e "\t- Is already installed"
+fi
+
+echo "Installing brew commands..."
+
+brew_commands=(
+	stow
+	bat
+	colima
+	docker
+	eza
+	fnm
+	fzf
+	grep
+	jq
+	just
+	lazydocker
+	lazygit
+	neofetch
+	pre-commit
+	pyenv
+	yazi
+	zellij
+	zoxide
+)
+
+for cmd in "${brew_commands[@]}"; do
+	if ! is_installed "$cmd"; then
+		echo -e "\t- Installing $cmd..."
+		brew install "$cmd"
+	else
+		echo -e "\t- $cmd is already installed"
+	fi
+done
+
+echo "Installing brew casks (like fonts, terms)..."
+
+brew_casks=(
+	font-jetbrains-mono-nerd-font
+	alacritty
+	wezterm
+	bruno
+)
+
+brew_current_casks=$(brew list --cask)
+
+for cask in "${brew_casks[@]}"; do
+	if ! echo "$brew_current_casks" | grep -q "$cask"; then
+		echo -e "\t- Installing $cask..."
+		brew install --cask "$cask"
+	else
+		echo -e "\t- $cask is already installed"
+	fi
+done
