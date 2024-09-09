@@ -1,1 +1,7 @@
-# dotfiles
+# Dotfiles
+
+## Sync Dotfiles
+
+```bash
+stow dotfiles
+```
