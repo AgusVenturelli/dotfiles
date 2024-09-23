@@ -61,4 +61,4 @@ themes {
 theme "catppuccin-mocha"
 
 default_layout "compact"
-pane_frames false
+// pane_frames false
