@@ -20,5 +20,6 @@ window-colorspace = "display-p3"
 macos-option-as-alt = left
 
 # quick-terminal-animation-duration=0.010
+confirm-close-surface = always
 
 keybind = global:ctrl+grave_accent=toggle_quick_terminal
