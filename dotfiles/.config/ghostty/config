@@ -2,7 +2,7 @@ theme = catppuccin-mocha
 
 # font-family = "JetBrainsMono Nerd Font"
 font-size = 14
-# adjust-cell-height= 5%
+# adjust-cell-height= 5%
 adjust-cell-width = -1
 
 cursor-style = block
@@ -17,9 +17,14 @@ window-decoration = true
 # macos-titlebar-style = tabs
 window-colorspace = "display-p3"
 
+resize-overlay = never
+
 macos-option-as-alt = left
 
-# quick-terminal-animation-duration=0.010
 confirm-close-surface = always
 
 keybind = global:ctrl+grave_accent=toggle_quick_terminal
+keybind = alt+up=resize_split:up,30
+keybind = alt+down=resize_split:down,30
+keybind = alt+right=resize_split:right,30
+keybind = alt+left=resize_split:left,30
